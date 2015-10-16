@@ -12,7 +12,7 @@ class vpn(
   }
 
   # install gateway packages
-  package { ['bridge-utils', 'fastd', 'openvpn', 'batctl', 'batman-adv-dkms']:
+  package { ['bridge-utils', 'fastd', 'openvpn', 'batctl', 'batman-adv-dkms', 'radvd']:
     ensure => installed,
   }
   exec {
@@ -20,6 +20,14 @@ class vpn(
       command => 'echo batman-adv >> /etc/modules',
       unless  => 'grep -q ^batman-adv /etc/modules',
       path    => ['/bin', '/usr/sbin'],
+  }
+
+  # radvd configuration
+  # setting up bat0
+  file { '/etc/radvd.conf':
+    ensure  => present,
+    mode    => '0600',
+    content => template('vpn/radvd.conf.erb'),
   }
 
   # fastd configuration
