@@ -6,7 +6,7 @@ class vpn(
   apt::source { 'universe-factory':
     comment  => 'This repo includes a fastd release',
     location => 'http://repo.universe-factory.net/debian/',
-    release  => 'jessie',
+    release  => 'sid',
     repos    => 'main',
   }
 
