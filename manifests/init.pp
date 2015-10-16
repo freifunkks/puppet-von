@@ -1,7 +1,8 @@
 class vpn(
   $inet_dev='eth0',
   $ip_addr,
-  $vpn_nr
+  $vpn_nr,
+  $secret_key
 ) {
   apt::source { 'universe-factory':
     comment  => 'This repo includes a fastd release',
@@ -18,7 +19,13 @@ class vpn(
   # fastd configuration
   file { '/etc/fastd/fastd.conf':
     ensure  => present,
+    mode    => '0600',
     content => template('vpn/fastd.conf.erb'),
-    mode    => 755,
+  }
+
+  file { '/etc/fastd/secret.conf':
+    ensure  => present,
+    mode    => '0600',
+    content => inline_template('secret "<%= @secret_key %>";');
   }
 }
