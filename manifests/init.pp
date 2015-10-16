@@ -26,6 +26,6 @@ class vpn(
   file { '/etc/fastd/secret.conf':
     ensure  => present,
     mode    => '0600',
-    content => inline_template('secret "<%= @secret_key %>";');
+    content => inline_template('secret "<%= @secret_key.chomp %>";');
   }
 }
