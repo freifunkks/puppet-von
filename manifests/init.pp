@@ -12,7 +12,7 @@ class vpn(
   }
 
   # install gateway packages
-  package { ['bridge-utils', 'fastd', 'openvpn', 'batctl', 'batman-adv-dkms', 'radvd']:
+  package { ['bridge-utils', 'fastd', 'openvpn', 'batctl', 'batman-adv-dkms', 'radvd', 'tayga']:
     ensure => installed,
   }
   exec {
@@ -30,6 +30,13 @@ class vpn(
     content => template('vpn/radvd.conf.erb'),
   }
 
+  # tayga configuration
+  file { '/etc/tayga.conf':
+    ensure  => present,
+    mode    => '0600',
+    content => template('vpn/tayga.conf.erb'),
+  }
+
   # fastd configuration
   file { '/etc/fastd/fastd.conf':
     ensure  => present,
@@ -44,9 +51,21 @@ class vpn(
   }
 
   # Start services
+  service { 'radvd':
+    ensure   => running,
+    provider => init,
+    enable   => true
+  }
+
+  service { 'tayga':
+    ensure   => running,
+    provider => init,
+    enable   => true
+  }
+
   service { 'fastd':
     ensure   => running,
     provider => init,
-    enable => true
+    enable   => true
   }
 }
