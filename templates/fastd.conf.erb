@@ -22,7 +22,7 @@ on up "
    ip addr add fdca:55e1:baca:baca::<%= @vpn_nr %>:80/64 dev bat0
    ip addr add 10.54.<%= @vpn_nr %>.80/16 dev bat0
    ip addr add fdca:55e1:baca:baca::<%= @vpn_nr %>:123/64 dev bat0
-   ip addr add 10.54.<% @vpn_nr %>.123/16 dev bat0
+   ip addr add 10.54.<%= @vpn_nr %>.123/16 dev bat0
    ip link set up dev bat0
 ";
 on down "
