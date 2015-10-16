@@ -15,6 +15,12 @@ class vpn(
   package { ['bridge-utils', 'fastd', 'openvpn', 'batctl', 'batman-adv-dkms']:
     ensure => installed,
   }
+  exec {
+    'enable_batman_mod':
+      command => 'echo batman-adv >> /etc/modules',
+      unless  => 'grep -q ^batman-adv /etc/modules',
+      path    => ['/bin', '/usr/sbin'],
+  }
 
   # fastd configuration
   file { '/etc/fastd/fastd.conf':
