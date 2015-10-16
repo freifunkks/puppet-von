@@ -1,0 +1,30 @@
+log level error;
+log to syslog level debug;
+
+interface "mesh-vpn";
+method "salsa2012+gmac";
+bind <%= @ip_addr %>:10000;
+include "secret.conf";
+mtu 1426;
+
+include peers from "peers";
+include peers from "partners";
+
+on up "
+   ip link set up dev $INTERFACE mtu 1426 address f6:b7:a2:e4:9f:<%= @vpn_nr -1 %>8
+   batctl if add $INTEFACE
+   batctl gw_mode server
+   ip link set dev bat0 mtu 1500 address f6:b7:a2:e4:9f:<%= @vpn_nr - 1 %>9
+
+   # Set up IP Address for the mesh address
+   ip addr add fdca:55e1:baca:baca::<%= @vpn_nr %>:1/64 dev bat0
+   ip addr add 10.54.<%= @vpn_nr %>.1/16 dev bat0
+   ip addr add fdca:55e1:baca:baca::<%= @vpn_nr %>:80/64 dev bat0
+   ip addr add 10.54.<%= @vpn_nr %>.80/16 dev bat0
+   ip addr add fdca:55e1:baca:baca::<%= @vpn_nr %>:123/64 dev bat0
+   ip addr add 10.54.<% @vpn_nr %>.123/16 dev bat0
+   ip link set up dev bat0
+";
+on down "
+
+";
