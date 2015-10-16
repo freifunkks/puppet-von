@@ -12,7 +12,7 @@ class vpn(
   }
 
   # install gateway packages
-  package { ['bridge-utils', 'fastd', 'openvpn', 'batctl']:
+  package { ['bridge-utils', 'fastd', 'openvpn', 'batctl', 'batman-adv-dkms']:
     ensure => installed,
   }
 
@@ -27,5 +27,12 @@ class vpn(
     ensure  => present,
     mode    => '0600',
     content => inline_template('secret "<%= @secret_key.chomp %>";');
+  }
+
+  # Start services
+  service { 'fastd':
+    ensure   => running,
+    provider => init,
+    enable => true
   }
 }
