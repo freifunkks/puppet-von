@@ -78,21 +78,21 @@ class vpn(
 
   file { '/etc/fastd/vpn/peers/vpn1':
     ensure  => present,
-    mode    => '0600',
+    mode    => '0755',
     content => template('vpn/fastd/peers/vpn1.erb'),
   }
 
   # openvpn configuration
   file { '/etc/openvpn/uplink/up.sh':
     ensure  => present,
-    mode    => '0600',
+    mode    => '0755',
     content => template('vpn/openvpn/up.sh.erb'),
   }
 
-  file { '/etc/openvpn/uplink/routeup.sh':
+  file { '/etc/openvpn/uplink/route_up.sh':
     ensure  => present,
-    mode    => '0600',
-    content => template('vpn/openvpn/routeup.sh.erb'),
+    mode    => '0755',
+    content => template('vpn/openvpn/route_up.sh.erb'),
   }
 
   file { '/etc/openvpn/uplink/down.sh':
