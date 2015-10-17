@@ -62,13 +62,13 @@ class vpn(
   }
 
   # fastd configuration
-  file { '/etc/fastd/fastd.conf':
+  file { '/etc/fastd/vpn/fastd.conf':
     ensure  => present,
     mode    => '0600',
     content => template('vpn/fastd.conf.erb'),
   }
 
-  file { '/etc/fastd/secret.conf':
+  file { '/etc/fastd/vpn/secret.conf':
     ensure  => present,
     mode    => '0600',
     content => inline_template('secret "<%= @secret_key.chomp %>";');
@@ -88,6 +88,12 @@ class vpn(
   }
 
   service { 'fastd':
+    ensure   => running,
+    provider => init,
+    enable   => true
+  }
+
+  service { 'batmand':
     ensure   => running,
     provider => init,
     enable   => true
