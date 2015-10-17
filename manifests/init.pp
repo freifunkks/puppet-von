@@ -88,4 +88,13 @@ class vpn(
     provider => init,
     enable   => true
   }
+
+  sysctl { 'net.ipv4.ip_forward': value => '1' }
+
+  # change conntrack timeouts to prevent droped packages
+  sysctl { 'net.netfilter.nf_conntrack_generic_timeout': value => '120' }
+  sysctl { 'net.ipv4.netfilter.ip_conntrack_generic_timeout': value => '120' }
+  # double nf_conntrack_max default value
+  sysctl { 'net.netfilter.nf_conntrack_max': value => '65536' }
+  sysctl { 'net.nf_conntrack_max': value => '65536' }
 }
