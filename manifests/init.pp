@@ -1,6 +1,8 @@
 class vpn(
   $inet_dev='eth0',
   $ip_addr,
+  $ip_base,
+  $ip_mask='24',
   $vpn_nr,
   $secret_key
 ) {
@@ -77,7 +79,26 @@ class vpn(
   file { '/etc/fastd/vpn/peers/vpn1':
     ensure  => present,
     mode    => '0600',
-    content => inline_template('vpn/fastd/peers/vpn1'),
+    content => template('vpn/fastd/peers/vpn1.erb'),
+  }
+
+  # openvpn configuration
+  file { '/etc/openvpn/uplink/up.sh':
+    ensure  => present,
+    mode    => '0600',
+    content => template('vpn/openvpn/up.sh.erb'),
+  }
+
+  file { '/etc/openvpn/uplink/routeup.sh':
+    ensure  => present,
+    mode    => '0600',
+    content => template('vpn/openvpn/routeup.sh.erb'),
+  }
+
+  file { '/etc/openvpn/uplink/down.sh':
+    ensure  => present,
+    mode    => '0600',
+    content => template('vpn/openvpn/down.sh.erb'),
   }
 
   # Start services

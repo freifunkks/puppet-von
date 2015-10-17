@@ -1,0 +1,4 @@
+#!/bin/sh
+
+/usr/bin/ip route add table 6 default via <%= @ip_base %>.1
+/usr/bin/ip rule add table 6 from <%= @ip_addr %>
