@@ -4,17 +4,11 @@ class vpn(
   $vpn_nr,
   $secret_key
 ) {
-  apt::source { 'sven_ola':
-    comment     => 'sven-olas repo for openvpn and other stuff',
-    location    => 'http://sven-ola.commando.de/repo',
-    release     => 'trusty',
-    repos       => 'main',
-    pin         => '500',
-    key         => 'AF1714D11903D0B2',
-    include     => {
-      src => false,
-      deb => true,
-    },
+  apt::source { 'universe-factory':
+    comment  => 'This repo includes a fastd release',
+    location => 'http://repo.universe-factory.net/debian/',
+    release  => 'sid',
+    repos    => 'main',
   }
 
   # install gateway packages
