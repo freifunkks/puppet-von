@@ -1,0 +1,9 @@
+#!/bin/sh -e
+#
+# rc.roulette
+#
+# This script is also executed via rc.local and openvpn e.g. start
+
+INET_DEV=<%= @inet_dev %> # External interface
+INET_ADD=<%= @ip_addr %>   # Additional IPs
+MESH_NET="10.54.0.0/16"

@@ -22,8 +22,28 @@ class vpn(
       path    => ['/bin', '/usr/sbin'],
   }
 
+  # script we use to change the NAT mapping
+  file { '/etc/cron.daily/roulette':
+    ensure  => present,
+    content => template('vpn/roulette.erb'),
+    mode    => 755,
+  }
+
+  # ipfilter commands and e.g. NAT configuration
+  file { '/etc/rc.local':
+    ensure  => present,
+    content => template('vpn/rc.local.erb'),
+    mode    => 755,
+  }
+
+  # add reverseroute table
+  file { '/etc/iproute2/rt_tables':
+    ensure => present,
+    content => template('vpn/rt_tables.erb'),
+    mode    => 755,
+  }
+
   # radvd configuration
-  # setting up bat0
   file { '/etc/radvd.conf':
     ensure  => present,
     mode    => '0600',
