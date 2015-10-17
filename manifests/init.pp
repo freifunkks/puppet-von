@@ -11,6 +11,10 @@ class vpn(
     repos    => 'main',
   }
 
+  Package {
+    install_options => ['--no-install-recommends', '--force-yes'],
+  }
+
   # install gateway packages
   package { ['bridge-utils', 'fastd', 'openvpn', 'batctl', 'batman-adv-dkms', 'radvd', 'tayga']:
     ensure => installed,
