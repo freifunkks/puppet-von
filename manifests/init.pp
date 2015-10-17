@@ -12,7 +12,7 @@ class vpn(
   }
 
   # install gateway packages
-  package { ['bridge-utils', 'fastd', 'openvpn', 'batctl', 'radvd', 'tayga']:
+  package { ['bridge-utils', 'fastd', 'openvpn', 'batctl', 'batman-adv-dkms', 'radvd', 'tayga']:
     ensure => installed,
   }
   exec {
