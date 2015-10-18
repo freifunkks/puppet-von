@@ -8,6 +8,7 @@ include "../secret.conf";
 mtu 1426;
 
 include peers from "peers";
+peer limit 30;
 
 on up "
   ip link set up dev $INTERFACE
