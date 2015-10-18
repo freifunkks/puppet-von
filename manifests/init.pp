@@ -54,17 +54,8 @@ class vpn(
     content => template('vpn/radvd.conf.erb'),
   }
 
-  # fastd configuration
-  file { '/etc/fastd/vpn/fastd.conf':
-    ensure  => present,
-    mode    => '0600',
-    content => template('vpn/fastd/fastd.conf.erb'),
-  }
-
-  file { '/etc/fastd/vpn/secret.conf':
-    ensure  => present,
-    mode    => '0600',
-    content => inline_template('secret "<%= file('/root/fastd_secret_key').chomp %>";');
+  class { 'vpn::fastd':
+    secret_key => file('/root/fastd_secret_key')
   }
 
   # network configuration
@@ -93,13 +84,30 @@ class vpn(
     enable   => true
   }
 
-  service { 'fastd':
+  service { 'batmand':
     ensure   => running,
     provider => init,
     enable   => true
   }
+}
 
-  service { 'batmand':
+class vpn::fastd(
+  $secret_key
+) {
+  # fastd configuration
+  file { '/etc/fastd/vpn/fastd.conf':
+    ensure  => present,
+    mode    => '0600',
+    content => template('vpn/fastd/fastd.conf.erb'),
+  }
+
+  file { '/etc/fastd/vpn/secret.conf':
+    ensure  => present,
+    mode    => '0600',
+    content => inline_template('secret "<%= @secret_key.chomp %>";');
+  }
+
+  service { 'fastd':
     ensure   => running,
     provider => init,
     enable   => true
