@@ -4,8 +4,7 @@ class vpn(
   $ip_mask='24',
   $ip_gtw,
   $ip_brd,
-  $vpn_nr,
-  $secret_key
+  $vpn_nr
 ) {
   apt::source { 'universe-factory':
     comment  => 'This repo includes a fastd release',
@@ -43,6 +42,11 @@ class vpn(
     path    => "/home/ffks/",
   }
 
+  exec { "generate_fastd_keys":
+    command => "fastd --generate-key",
+    unless  => "cat /root/fastd_secret_key",
+  }
+
   # radvd configuration
   file { '/etc/radvd.conf':
     ensure  => present,
@@ -60,7 +64,7 @@ class vpn(
   file { '/etc/fastd/vpn/secret.conf':
     ensure  => present,
     mode    => '0600',
-    content => inline_template('secret "<%= @secret_key.chomp %>";');
+    content => inline_template('secret "<%= file('/root/fastd_secret_key').chomp %>";');
   }
 
   # network configuration
