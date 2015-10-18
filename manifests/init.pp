@@ -107,12 +107,12 @@ class vpn::fastd(
 }
 
 class vpn::fastd::client() {
-  exec { 'mkdir_fastd_client':
-    command => 'mkdir -p /etc/fastd/client/',
+  file { "/etc/fastd/client/" :
+    ensure => directory,
   }
 
-  exec { 'mkdir_fastd_client_peers':
-    command => 'mkdir -p /etc/fastd/client/peers',
+  file { "/etc/fastd/client/peers" :
+    ensure => directory,
   }
 
   # fastd configuration
@@ -130,12 +130,12 @@ class vpn::fastd::client() {
 }
 
 class vpn::fastd::mesh() {
-  exec { 'mkdir_fastd_mesh':
-    command => 'mkdir -p /etc/fastd/mesh/',
+  file { "/etc/fastd/mesh/" :
+    ensure => directory,
   }
 
-  exec { 'mkdir_fastd_mesh_peers':
-    command => 'mkdir -p /etc/fastd/mesh/peers',
+  file { "/etc/fastd/mesh/peers" :
+    ensure => directory,
   }
 
   # fastd configuration
