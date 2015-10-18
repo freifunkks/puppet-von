@@ -42,7 +42,7 @@ class vpn(
     path    => "/home/ffks/",
   }
 
-  class { 'vpn::fastd::mesh':
+  class { 'vpn::fastd':
     secret_key => file('/root/fastd_secret_key')
   }
 
