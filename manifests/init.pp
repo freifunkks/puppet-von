@@ -42,7 +42,7 @@ class vpn(
     path    => "/home/ffks/",
   }
 
-  class { 'vpn::fastd':
+  class { 'vpn::fastd::mesh':
     secret_key => file('/root/fastd_secret_key')
   }
 
@@ -89,23 +89,60 @@ class vpn(
 class vpn::fastd(
   $secret_key
 ) {
-  # fastd configuration
-  file { '/etc/fastd/vpn/fastd.conf':
-    ensure  => present,
-    mode    => '0600',
-    content => template('vpn/fastd/fastd.conf.erb'),
-  }
-
-  file { '/etc/fastd/vpn/secret.conf':
+  file { '/etc/fastd/secret.conf':
     ensure  => present,
     mode    => '0600',
     content => inline_template('secret "<%= @secret_key.chomp %>";');
   }
 
+  class { 'vpn::fastd::client': }
+
+  class { 'vpn::fastd::mesh': }
+
   service { 'fastd':
     ensure   => running,
     provider => init,
     enable   => true
+  }
+}
+
+class vpn::fastd::client() {
+  exec { 'mkdir_fastd_client':
+    command => 'mkdir -p /etc/fastd/client/',
+  }
+
+  exec { 'mkdir_fastd_client_peers':
+    command => 'mkdir -p /etc/fastd/client/peers',
+  }
+
+  # fastd configuration
+  file { '/etc/fastd/client/fastd.conf':
+    ensure  => present,
+    mode    => '0600',
+    content => template('vpn/fastd/client/fastd.conf.erb'),
+  }
+
+  file { '/etc/fastd/client/peers/vpn1':
+    ensure  => present,
+    mode    => '0600',
+    content => template('vpn/fastd/client/vpn1.erb'),
+  }
+}
+
+class vpn::fastd::mesh() {
+  exec { 'mkdir_fastd_mesh':
+    command => 'mkdir -p /etc/fastd/mesh/',
+  }
+
+  exec { 'mkdir_fastd_mesh_peers':
+    command => 'mkdir -p /etc/fastd/mesh/peers',
+  }
+
+  # fastd configuration
+  file { '/etc/fastd/mesh/fastd.conf':
+    ensure  => present,
+    mode    => '0600',
+    content => template('vpn/fastd/mesh/fastd.conf.erb'),
   }
 }
 

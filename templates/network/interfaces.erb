@@ -1,8 +1,13 @@
 # Virtual interface for fastd communication
-auto mesh-vpn
-iface mesh-vpn inet static
+auto fastd-client
+iface fastd-client inet static
+  hwaddress ether f6:b7:a2:e4:9f:<%= @vpn_nr.to_i - 1 %>7
+  post-up ifconfig fastd-client mtu 1426
+
+auto fastd-mesh
+iface fastd-mesh inet static
   hwaddress ether f6:b7:a2:e4:9f:<%= @vpn_nr.to_i - 1 %>8
-  post-up ifconfig mesh-vpn mtu 1426
+  post-up ifconfig fastd-mesh mtu 1426
 
 # Virtual interface for batman communication
 auto bat0

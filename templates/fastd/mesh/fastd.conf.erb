@@ -1,10 +1,10 @@
 log level error;
 log to syslog level debug;
 
-interface "mesh-vpn";
+interface "fastd-mesh";
 method "salsa2012+gmac";
 bind <%= @ip_addr %>:10000;
-include "secret.conf";
+include "../secret.conf";
 mtu 1426;
 
 include peers from "peers";
