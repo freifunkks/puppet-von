@@ -1,6 +1,0 @@
-#!/bin/sh
-dev=tun0
-
-ip route add table 7 default via <%= @ip_base %>.1
-ip route add table 7 <%= @ip_addr %> dev <%= @inet_dev %>
-ip rule add table 7 from 10.54.0.0/16 to <%= @ip_base %>.0/<%= @ip_mask %>

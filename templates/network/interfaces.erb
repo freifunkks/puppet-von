@@ -1,0 +1,23 @@
+# Virtual interface for fastd communication
+auto mesh-vpn
+iface mesh-vpn inet static
+  hwaddress ether f6:b7:a2:e4:9f:<%= @vpn_nr.to_i - 1 %>8
+  post-up ifconfig mesh-vpn mtu 1426
+
+# Virtual interface for batman communication
+auto bat0
+iface bat0 inet static
+  address 10.54.<%= @vpn_nr %>.1
+  netmask 16
+  hwaddress ether f6:b7:a2:e4:9f:<%= @vpn_nr.to_i - 1 %>9
+  post-up ifconfig bat0 mtu 1500
+
+iface bat0 inet6 static
+  address fdca:55e1:baca:baca::<%= @vpn_nr %>:1
+  netmask 64
+
+# Virtual interface for openvpn communication
+auto tun0
+iface tun0 inet static
+  post-up /etc/network/if-up.d/tun0.post.up
+  pre-down /etc/network/if-down.d/tun0.pre.down

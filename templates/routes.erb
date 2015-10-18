@@ -1,0 +1,7 @@
+iptables -t nat -A PREROUTING -s 10.54.0.0/16 -d 10.54.0.0/16 -i bat0 -o bat0
+iptables -t nat -A PREROUTING -s 10.54.0.0/16 -i bat0 -o tun0
+
+iptables -t nat -A POSTROUTING -o tun0 -j MASQUERADE
+
+# Turn on IP forwarding
+echo 1 > /proc/sys/net/ipv4/ip_forward

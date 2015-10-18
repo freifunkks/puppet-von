@@ -1,8 +1,9 @@
 class vpn(
   $inet_dev='eth0',
   $ip_addr,
-  $ip_base,
   $ip_mask='24',
+  $ip_gtw,
+  $ip_brd,
   $vpn_nr,
   $secret_key
 ) {
@@ -18,7 +19,7 @@ class vpn(
   }
 
   # install gateway packages
-  package { ['bridge-utils', 'fastd', 'openvpn', 'batctl', 'batman-adv-dkms', 'radvd', 'tayga']:
+  package { ['bridge-utils', 'fastd', 'openvpn', 'radvd']:
     ensure => installed,
   }
   exec {
@@ -28,25 +29,18 @@ class vpn(
       path    => ['/bin', '/usr/sbin'],
   }
 
-  # script we use to change the NAT mapping
-  file { '/etc/cron.daily/roulette':
+  # Build batman-adv, batctl and alfred
+  package { ['build-essential', 'pkg-config', 'libnl-3-dev']:
+    ensure => installed,
+  }
+  file { '/home/ffks/install.sh':
     ensure  => present,
-    content => template('vpn/roulette.erb'),
+    content => template('vpn/install.sh'),
     mode    => 755,
   }
-
-  # ipfilter commands and e.g. NAT configuration
-  file { '/etc/rc.local':
-    ensure  => present,
-    content => template('vpn/rc.local.erb'),
-    mode    => 755,
-  }
-
-  # add reverseroute table
-  file { '/etc/iproute2/rt_tables':
-    ensure => present,
-    content => template('vpn/rt_tables.erb'),
-    mode    => 755,
+  exec { "install_batman":
+    command => "install.sh",
+    path    => "/home/ffks/",
   }
 
   # radvd configuration
@@ -54,13 +48,6 @@ class vpn(
     ensure  => present,
     mode    => '0600',
     content => template('vpn/radvd.conf.erb'),
-  }
-
-  # tayga configuration
-  file { '/etc/tayga.conf':
-    ensure  => present,
-    mode    => '0600',
-    content => template('vpn/tayga.conf.erb'),
   }
 
   # fastd configuration
@@ -76,39 +63,27 @@ class vpn(
     content => inline_template('secret "<%= @secret_key.chomp %>";');
   }
 
-  file { '/etc/fastd/vpn/peers/vpn1':
-    ensure  => present,
-    mode    => '0755',
-    content => template('vpn/fastd/peers/vpn1.erb'),
-  }
-
-  # openvpn configuration
-  file { '/etc/openvpn/uplink/up.sh':
-    ensure  => present,
-    mode    => '0755',
-    content => template('vpn/openvpn/up.sh.erb'),
-  }
-
-  file { '/etc/openvpn/uplink/route_up.sh':
-    ensure  => present,
-    mode    => '0755',
-    content => template('vpn/openvpn/route_up.sh.erb'),
-  }
-
-  file { '/etc/openvpn/uplink/down.sh':
+  # network configuration
+  file { '/etc/network/interfaces.d/ff-vpn':
     ensure  => present,
     mode    => '0600',
-    content => template('vpn/openvpn/down.sh.erb'),
+    content => template('vpn/network/interfaces.erb'),
+  }
+
+  file { '/etc/network/if-up.d/tun0.post.up':
+    ensure  => present,
+    mode    => '0600',
+    content => template('vpn/network/if-up.d/tun0.post.up.erb'),
+  }
+
+  file { '/etc/network/if-down.d/tun0.pre.down':
+    ensure  => present,
+    mode    => '0600',
+    content => template('vpn/network/if-down.d/tun0.pre.down.erb'),
   }
 
   # Start services
   service { 'radvd':
-    ensure   => running,
-    provider => init,
-    enable   => true
-  }
-
-  service { 'tayga':
     ensure   => running,
     provider => init,
     enable   => true
@@ -125,13 +100,10 @@ class vpn(
     provider => init,
     enable   => true
   }
+}
 
-  sysctl { 'net.ipv4.ip_forward': value => '1' }
-
-  # change conntrack timeouts to prevent droped packages
-  sysctl { 'net.netfilter.nf_conntrack_generic_timeout': value => '120' }
-  sysctl { 'net.ipv4.netfilter.ip_conntrack_generic_timeout': value => '120' }
-  # double nf_conntrack_max default value
-  sysctl { 'net.netfilter.nf_conntrack_max': value => '65536' }
-  sysctl { 'net.nf_conntrack_max': value => '65536' }
+class vpn::icvpn() {
+  package { ['bird', 'tinc']:
+    ensure => installed,
+  }
 }
