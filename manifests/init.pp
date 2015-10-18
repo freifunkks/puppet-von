@@ -42,9 +42,8 @@ class vpn(
     path    => "/home/ffks/",
   }
 
-  exec { "generate_fastd_keys":
-    command => "fastd --generate-key",
-    unless  => "cat /root/fastd_secret_key",
+  class { 'vpn::fastd':
+    secret_key => file('/root/fastd_secret_key')
   }
 
   # radvd configuration
@@ -52,10 +51,6 @@ class vpn(
     ensure  => present,
     mode    => '0600',
     content => template('vpn/radvd.conf.erb'),
-  }
-
-  class { 'vpn::fastd':
-    secret_key => file('/root/fastd_secret_key')
   }
 
   # network configuration
