@@ -3,7 +3,7 @@ log to syslog level debug;
 
 interface "fastd-client";
 method "salsa2012+gmac";
-bind <%= @ip_addr %>:10000;
+bind <%= @ip_addr %>:10001;
 include "../secret.conf";
 mtu 1426;
 

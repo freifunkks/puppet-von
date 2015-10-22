@@ -1,27 +1,14 @@
-interface bat0 {
-  IgnoreIfMissing on;
+interface bat0
+{
   AdvSendAdvert on;
-  AdvOtherConfigFlag off;
-  AdvDefaultLifetime 1800;
-  AdvLinkMTU 0;
-  AdvCurHopLimit 64;
-  AdvReachableTime 0;
-  MaxRtrAdvInterval 600;
-  MinRtrAdvInterval 198;
-  AdvDefaultPreference high;
-  AdvRetransTimer 0;
-  AdvManagedFlag off;
-  UnicastOnly on; #send RAs only as a request as unicast
+  IgnoreIfMissing on;
+  MaxRtrAdvInterval 200;
 
-#  prefix fdef:17a0:ffb1:300::/64 {
-#    AdvOnLink on;
-#    AdvAutonomous on;
-#    AdvRouterAddr on;
-#  };
-#  prefix 2001:bf7:1320:300::/64 {
-#    AdvOnLink on;
-#    AdvAutonomous on;
-#    AdvRouterAddr on;
-#  };
-#  RDNSS fdef:17a0:ffb1:300::1 {  };
+  prefix fdca:55e1:baca:baca::/64
+  {
+  };
+
+  RDNSS fdca:55e1:baca:baca::<%= @vpn_nr %>:1
+  {
+  };
 };

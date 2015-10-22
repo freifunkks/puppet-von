@@ -38,7 +38,7 @@ class vpn(
     mode    => 755,
   }
   exec { "install_batman":
-    command => "install.sh",
+    command => "bash install.sh",
     path    => "/home/ffks/",
   }
 
@@ -80,12 +80,6 @@ class vpn(
 
   # Start services
   service { 'radvd':
-    ensure   => running,
-    provider => init,
-    enable   => true
-  }
-
-  service { 'batmand':
     ensure   => running,
     provider => init,
     enable   => true
