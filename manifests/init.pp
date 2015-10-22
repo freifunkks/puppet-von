@@ -42,6 +42,12 @@ class vpn(
     path    => "/home/ffks/",
   }
 
+  file { '/root/setup.sh':
+    ensure  => present,
+    content => template('vpn/setup.sh.erb'),
+    mode    => 700,
+  }
+
   class { 'vpn::fastd':
     secret_key => file('/root/fastd_secret_key')
   }
