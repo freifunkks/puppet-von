@@ -1,14 +1,14 @@
 VERSION=2013.4.0
- 
-#apt-get install build-essential 
-apt-get install linux-headers-$(uname -r)
+
+#apt-get install build-essential
+su -c "apt-get install linux-headers-$(uname -r)"
 #apt-get install pkg-config
 #apt-get install libnl-3-dev
 
 git clone https://github.com/freifunk-gluon/batman-adv-legacy.git
 cd batman-adv-legacy
 make
-make install
+su -c "make install"
 cd ..
 rm -rf batman-adv-legacy
 
@@ -25,14 +25,14 @@ wget http://downloads.open-mesh.org/batman/releases/batman-adv-$VERSION/batctl-$
 tar -xzf batctl-$VERSION.tar.gz
 cd batctl-$VERSION/
 make
-make install
+su -c "make install"
 cd ..
 rm -rf batctl-$VERSION*
 
 wget http://downloads.open-mesh.org/batman/stable/sources/alfred/alfred-$VERSION.tar.gz
 tar -xzf alfred-$VERSION.tar.gz
 cd alfred-$VERSION/
-make CONFIG_ALFRED_GPSD=n 
-make CONFIG_ALFRED_GPSD=n install
+make CONFIG_ALFRED_GPSD=n
+su -c "make CONFIG_ALFRED_GPSD=n install"
 cd ..
 rm -rf alfred-$VERSION*
