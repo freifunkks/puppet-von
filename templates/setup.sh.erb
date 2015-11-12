@@ -1,9 +1,9 @@
 #!/bin/sh
 is_running() {
-  pgrep "$1" > /dev/null
+  pidof "$1" > /dev/null
 }
 
-if ! lsmod | grep "batman_adv" > /dev/null; then
+if ! lsmod | grep -q "batman_adv"; then
   echo "(I) Start batman-adv."
   echo "5000" >  /sys/class/net/bat0/mesh/orig_interval
 fi
