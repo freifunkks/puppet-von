@@ -1,0 +1,20 @@
+dhcp-authoritative
+#log-dhcp
+domain=ffks
+dhcp-leasefile=/var/lib/misc/dnsmasq.leases
+
+# Subnet
+dhcp-option=1,255.255.0.0
+# Default Route
+dhcp-option=3,10.54.<%= @vpn_nr %>.1
+# DNS-Server
+dhcp-option=6,10.54.<%= @vpn_nr %>.1
+dhcp-option-force=26,1280
+dhcp-option=28,10.54.255.255
+
+# Ranges
+dhcp-range=ffks-mesh,10.54.<%= @vpn_nr %>0.2,10.54.<%= @vpn_nr.to_i + 1 %>0.0,255.255.0.0,1h
+dhcp-range=ffks-mesh,fdca:55e1:baca:baca::<%= @vpn_nr %>0:2, fdca:55e1:baca:baca::<%= @vpn_nr.to_i + 1 %>0:0, 64, 1h
+
+enable-ra
+ra-param=ffks-br,low,0,0

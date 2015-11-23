@@ -1,0 +1,57 @@
+127.0.0.1       localhost
+
+# The following lines are desirable for IPv6 capable hosts
+::1     localhost ip6-localhost ip6-loopback
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+37.120.176.206  v22015032733524052.yourvserver.net      v22015032733524052
+
+#
+# /etc/hosts: static lookup table for host names
+#
+
+#<ip-address>                         <hostname.domain.org>   <hostname>
+127.0.0.1                             localhost.localdomain   localhost
+::1                                   localhost6
+
+10.54.0.1                             ap.ffks
+fdca:55e1:baca:baca::1                ap.ffks
+10.54.1.1                             vpn1.ffks               vpn1.ffks.de
+fdca:55e1:baca:baca::1:1              vpn1.ffks               vpn1.ffks.de
+10.54.1.80                            map.ffks                map.ffks.de
+fdca:55e1:baca:baca::1:80             map.ffks                map.ffks.de
+10.54.1.80                            dl.ffks                 dl.ffks.de
+fdca:55e1:baca:baca::1:80             dl.ffks                 dl.ffks.de
+10.54.1.80                            api.ffks                api.ffks.de
+fdca:55e1:baca:baca::1:80             api.ffks                api.ffks.de
+
+10.54.2.1                             vpn2.ffks               vpn2.ffks.de
+fdca:55e1:baca:baca::2:1              vpn2.ffks               vpn2.ffks.de
+
+10.54.3.1                             vpn3.ffks               vpn3.ffks.de
+fdca:55e1:baca:baca::3:1              vpn3.ffks               vpn3.ffks.de
+
+10.54.4.1                             vpn4.ffks               vpn4.ffks.de
+fdca:55e1:baca:baca::4:1              vpn4.ffks               vpn4.ffks.de
+
+10.54.5.1                             vpn5.ffks               vpn5.ffks.de
+fdca:55e1:baca:baca::5:1              vpn5.ffks               vpn5.ffks.de
+
+10.54.6.1                             vpn6.ffks               vpn6.ffks.de
+fdca:55e1:baca:baca::6:1              vpn6.ffks               vpn6.ffks.de
+
+10.54.7.1                             vpn7.ffks               vpn7.ffks.de
+fdca:55e1:baca:baca::7:1              vpn7.ffks               vpn7.ffks.de
+
+10.54.8.1                             vpn8.ffks               vpn8.ffks.de
+fdca:55e1:baca:baca::8:1              vpn8.ffks               vpn8.ffks.de
+
+10.54.9.1                             vpn9.ffks               vpn9.ffks.de
+fdca:55e1:baca:baca::9:1              vpn9.ffks               vpn9.ffks.de
+
+# Local services
+
+10.54.17.19                           teeworlds.zocken.ffks   teeworlds.ffks
+fdca:55e1:baca:baca:6:7ff:fec0:c174   teeworlds.zocken.ffks   teeworlds.ffks
+
+# End of file

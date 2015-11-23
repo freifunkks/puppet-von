@@ -1,8 +1,0 @@
-#! /bin/sh
-
-ip route add table 6 default via <%= @ip_gtw %>
-ip rule add table 6 from <%= @ip_addr %>
-
-ip route add table 7 default via <%= @ip_gtw %>
-ip route add table 7 <%= @ip_addr %> dev <%= @eth_dev %>
-ip rule add table 7 from 10.54.0.0/16 to <%= @ip_brd %>/<%= @ip_mask %>
