@@ -44,7 +44,7 @@ class vpn(
 
   file { '/root/setup.sh':
     ensure  => present,
-    content => template('vpn/setup.sh.erb'),
+    content => template('vpn/setup.sh'),
     mode    => 700,
   }
 
