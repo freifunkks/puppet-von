@@ -29,6 +29,8 @@ su -c "make install"
 cd ..
 rm -rf batctl-$VERSION*
 
+VERSION=2014.4.0
+
 wget http://downloads.open-mesh.org/batman/stable/sources/alfred/alfred-$VERSION.tar.gz
 tar -xzf alfred-$VERSION.tar.gz
 cd alfred-$VERSION/
@@ -36,3 +38,11 @@ make CONFIG_ALFRED_GPSD=n
 su -c "make CONFIG_ALFRED_GPSD=n install"
 cd ..
 rm -rf alfred-$VERSION*
+
+
+echo 'conf-dir=/etc/dnsmasq.d,.bak' >> /etc/dnsmasq.conf
+
+vnstat --create -i ffks-mesh
+vnstat --create -i ffks-client
+vnstat --create -i bat0
+vnstat --create -i tun0

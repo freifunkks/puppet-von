@@ -1,28 +1,37 @@
-# Virtual interface for fastd communication
-auto fastd-client
-iface fastd-client inet static
-  hwaddress ether f6:b7:a2:e4:9f:<%= @vpn_nr.to_i - 1 %>7
-  post-up ifconfig fastd-client mtu 1426
-
-auto fastd-mesh
-iface fastd-mesh inet static
-  hwaddress ether f6:b7:a2:e4:9f:<%= @vpn_nr.to_i - 1 %>8
-  post-up ifconfig fastd-mesh mtu 1426
-
-# Virtual interface for batman communication
 auto bat0
-iface bat0 inet static
-  address 10.54.<%= @vpn_nr %>.1
-  netmask 16
-  hwaddress ether f6:b7:a2:e4:9f:<%= @vpn_nr.to_i - 1 %>9
-  post-up ifconfig bat0 mtu 1500
-
 iface bat0 inet6 static
-  address fdca:55e1:baca:baca::<%= @vpn_nr %>:1
-  netmask 64
+  hwaddress       f6:b7:a2:e4:9f:<%= @vpn_nr.to_i - 1 %>9
+  address         10.54.<%= @vpn_nr %>.1
+  netmask         255.255.0.0
+  pre-up          /sbin/brctl addbr $IFACE
+  up              /sbin/ip address add fdca:55e1:baca:baca::<%= @vpn_nr %>:1 dev $IFACE
+  post-down       /sbin/brctl delbr $IFACE
+  # be sure all incoming traffic is handled by the appropriate rt_table
+  post-up         /sbin/ip rule add iif $IFACE table kassel priority 7000
+  pre-down        /sbin/ip rule del iif $IFACE table kassel priority 7000
+  # default route is unreachable
+  post-up         /sbin/ip route add unreachable default table kassel
+  post-down       /sbin/ip route del unreachable default table kassel
+  # ULA route for rt_table kassel
+  post-up         /sbin/ip -6 route add fdca:55e1:baca:baca::/64 proto static dev $IFACE table kassel
+  post-down       /sbin/ip -6 route del fdca:55e1:baca:baca::/64 proto static dev $IFACE table kassel
+  post-up         /usr/sbin/batctl -m $IFACE it 10000
+  post-up         /usr/sbin/batctl -m $IFACE vm server
+  post-up         /usr/sbin/batctl -m $IFACE gw server  96mbit/96mbit
+  post-up         /sbin/ifconfig $IFACE mtu 1500
 
-# Virtual interface for openvpn communication
-auto tun0
-iface tun0 inet static
-  post-up /etc/network/if-up.d/tun0.post.up
-  pre-down /etc/network/if-down.d/tun0.pre.down
+# Virtual interface for fastd communication with vpn1
+allow-hotplug ffks-client
+iface ffks-client inet6 manual
+  hwaddress       f6:b7:a2:e4:9f:<%= @vpn_nr.to_i - 1 %>7
+  post-up         /usr/sbin/batctl -m bat0 if add $IFACE
+  post-up         /sbin/ip link set dev bat0 up
+  post-up         /sbin/ifconfig $IFACE mtu 1426
+
+# Virtual interface for fastd meshing
+allow-hotplug ffks-mesh
+iface ffks-mesh inet6 manual
+  hwaddress       f6:b7:a2:e4:9f:<%= @vpn_nr.to_i - 1 %>8
+  post-up         /usr/sbin/batctl -m bat0 if add $IFACE
+  post-up         /sbin/ip link set dev bat0 up
+  post-up         /sbin/ifconfig $IFACE mtu 1426

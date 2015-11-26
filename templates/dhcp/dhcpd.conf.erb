@@ -1,0 +1,21 @@
+ddns-update-style none;
+option domain-name "ffks";
+option domain-name-servers 10.54.2.1, 10.54.1.1;
+
+default-lease-time 600;
+max-lease-time 7200;
+
+# If this DHCP server is the official DHCP server for the local
+# network, the authoritative directive should be uncommented.
+#authoritative;
+
+log-facility local7;
+
+# IPv4 FFKS Subnet
+subnet 10.54.0.0 netmask 255.255.0.0 {
+  authoritative;
+  range 10.54.20.2 10.54.30.0;
+
+  option domain-name-servers 10.54.2.1, 10.54.1.1;
+  option routers 10.54.2.1;
+}

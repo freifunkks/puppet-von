@@ -1,0 +1,3 @@
+INTERFACE=bat0
+BATMANIF=bat0
+DAEMON_ARGS="--master"

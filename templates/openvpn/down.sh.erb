@@ -1,0 +1,9 @@
+#! /bin/sh
+
+vpn_interface="tun0"
+mesh_interface="ffks-mesh"
+
+ip route del table 6 default via <%= @ip_gtw %>
+ip rule del table 6 from <%= @ip_addr %>
+
+iptables --table nat --remove POSTROUTING --out-interface "$vpn_interface" -j MASQUERADE

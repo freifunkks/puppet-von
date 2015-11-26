@@ -1,7 +1,7 @@
 log level error;
 log to syslog level debug;
 
-interface "fastd-client";
+interface "ffks-client";
 method "salsa2012+gmac";
 bind <%= @ip_addr %>:10001;
 include "../secret.conf";
