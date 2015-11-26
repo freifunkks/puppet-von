@@ -1,4 +1,3 @@
-interface=ffks-br
 interface=bat0
 interface=ffks-mesh
 bind-interfaces

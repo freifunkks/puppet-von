@@ -44,6 +44,5 @@ echo 'conf-dir=/etc/dnsmasq.d,.bak' >> /etc/dnsmasq.conf
 
 vnstat --create -i ffks-mesh
 vnstat --create -i ffks-client
-vnstat --create -i ffks-br
 vnstat --create -i bat0
 vnstat --create -i tun0
