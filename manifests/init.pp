@@ -25,6 +25,13 @@ class vpn(
     ensure => installed,
   }
 
+  exec {
+    'enable_batman_mod':
+      command => 'echo batman-adv >> /etc/modules',
+      unless  => 'grep -q ^batman-adv /etc/modules',
+      path    => ['/bin', '/usr/sbin'],
+  }
+
   # Build batman-adv, batctl and alfred
   package { ['build-essential', 'pkg-config', 'libnl-3-dev']:
     ensure => installed,
