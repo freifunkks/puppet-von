@@ -16,7 +16,7 @@ iface bat0 inet6 static
   post-up         /sbin/ip -6 route add fdca:55e1:baca:baca::/64 proto static dev $IFACE table kassel
   post-down       /sbin/ip -6 route del fdca:55e1:baca:baca::/64 proto static dev $IFACE table kassel
   post-up         /usr/sbin/batctl -m $IFACE it 10000
-  post-up         /usr/sbin/batctl -m $IFACE vm server
+  <!-- post-up         /usr/sbin/batctl -m $IFACE vm server -->
   post-up         /usr/sbin/batctl -m $IFACE gw server  96mbit/96mbit
   post-up         /sbin/ifconfig $IFACE mtu 1500
 

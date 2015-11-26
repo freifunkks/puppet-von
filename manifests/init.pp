@@ -57,6 +57,7 @@ class vpn(
   }
 
   class { 'vpn::dnsmasq': }
+  class { 'vpn::openvpn': }
 
   # network configuration
   file { '/etc/sysctl.conf':
@@ -75,13 +76,6 @@ class vpn(
     ensure  => present,
     mode    => 755,
     content => template('vpn/iproute2/rt_tables'),
-  }
-
-
-  file { '/etc/sysctl.conf':
-    ensure  => present,
-    content => template('vpn/sysctl.conf'),
-    mode    => 755,
   }
 
   # alfred configuration
@@ -248,7 +242,7 @@ class vpn::dnsmasq() {
 
   file { '/etc/hosts':
     ensure  => present,
-    content => template('hosts'),
+    content => template('vpn/hosts'),
     mode    => 755,
   }
 
