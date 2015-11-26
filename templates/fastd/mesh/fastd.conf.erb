@@ -11,8 +11,9 @@ include peers from "peers";
 peer limit 30;
 
 on up "
-  ip link set up dev $INTERFACE
-  batctl if add $INTERFACE
-  batctl gw_mode server
-  ip link set up dev bat0
+  ifup $INTERFACE
+";
+
+on down "
+  ifdown $INTERFACE
 ";

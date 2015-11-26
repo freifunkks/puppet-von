@@ -10,5 +10,9 @@ mtu 1426;
 include peer "peers/vpn1" as "vpn1";
 
 on up "
-  ip link set up dev $INTERFACE
+  ifup $INTERFACE
+";
+
+on down "
+  ifdown $INTERFACE
 ";

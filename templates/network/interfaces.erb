@@ -3,9 +3,8 @@ iface bat0 inet static
   hwaddress       f6:b7:a2:e4:9f:<%= @vpn_nr.to_i - 1 %>9
   address         10.54.<%= @vpn_nr %>.1
   netmask         255.255.0.0
-  mtu             1500
   #pre-up          /sbin/brctl addbr $IFACE
-  #up              /sbin/ip address add fdca:55e1:baca:baca::<%= @vpn_nr %>:1 dev $IFACE
+  up              /sbin/ip address add fdca:55e1:baca:baca::<%= @vpn_nr %>:1 dev $IFACE
   #post-down       /sbin/brctl delbr $IFACE
   # be sure all incoming traffic is handled by the appropriate rt_table
   #post-up         /sbin/ip rule add iif $IFACE table kassel priority 7000
@@ -17,21 +16,22 @@ iface bat0 inet static
   #post-up         /sbin/ip -6 route add fdca:55e1:baca:baca::/64 proto static dev $IFACE table kassel
   #post-down       /sbin/ip -6 route del fdca:55e1:baca:baca::/64 proto static dev $IFACE table kassel
   #post-up         /usr/local/sbin/batctl -m $IFACE it 10000
-  ##post-up         /usr/local/sbin/batctl -m $IFACE vm server
-  #post-up         /usr/local/sbin/batctl -m $IFACE gw server  96mbit/96mbit
+  #post-up         /usr/local/sbin/batctl -m $IFACE vm server
+  post-up         /usr/local/sbin/batctl -m $IFACE gw server  96mbit/96mbit
+  post-up         /sbin/ip link set dev $IFACE address f6:b7:a2:e4:9f:<%= @vpn_nr.to_i -1 %>9
 
 # Virtual interface for fastd communication with vpn1
 auto ffks-client
 iface ffks-client inet6 static
-  hwaddress       f6:b7:a2:e4:9f:<%= @vpn_nr.to_i - 1 %>7
-  mtu             1426
-  #post-up         /usr/local/sbin/batctl -m bat0 if add $IFACE
-  #post-up         /sbin/ip link set dev bat0 up
+  up              /sbin/ip link set dev $IFACE address f6:b7:a2:e4:9f:<%= @vpn_nr.to_i - 1 %>7
+  post-up         /usr/local/sbin/batctl -m bat0 if add $IFACE
+  post-up         /sbin/ip link set dev bat0 up
+  post-up         /sbin/ip link set dev $IFACE up
 
 # Virtual interface for fastd meshing
 auto ffks-mesh
 iface ffks-mesh inet6 static
-  hwaddress       f6:b7:a2:e4:9f:<%= @vpn_nr.to_i - 1 %>8
-  mtu             1426
-  #post-up         /usr/local/sbin/batctl -m bat0 if add $IFACE
-  #post-up         /sbin/ip link set dev bat0 up
+  up              /sbin/ip link set dev $IFACE address f6:b7:a2:e4:9f:<%= @vpn_nr.to_i - 1 %>8
+  post-up         /usr/local/sbin/batctl -m bat0 if add $IFACE
+  post-up         /sbin/ip link set dev bat0 up
+  post-up         /sbin/ip link set dev $IFACE up
