@@ -10,6 +10,10 @@ ip route add table kassel default via <%= @ip_gtw %>
 ip route add table kassel <%= @ip_addr %> dev <%= @eth_dev %>
 ip rule add table kassel from 10.54.0.0/16 to <%= @ip_brd %>/<%= @ip_mask %>
 
+ip rule add from <%= @ip_addr %> table kassel priority 9970
+ip route add 0.0.0.0/1 via <%= @ip_gtw %> dev $vpn_interface table kassel
+ip route add 128.0.0.0/1 via <%= @ip_gtw %> dev $vpn_interface table kassel
+
 ip route flush cache
 
 # enable packet forwarding to function s a router
