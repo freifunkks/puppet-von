@@ -3,5 +3,5 @@ no-hosts
 cache-size=4096
 #log-queries
 # Forward DNS requests via wan-vpn
-server=85.214.20.141<%= @inet_dev %> # FoeBud
+server=85.214.20.141@<%= @inet_dev %> # FoeBud
 server=213.73.91.35@<%= @inet_dev %> # dnscache.berlin.ccc.de
