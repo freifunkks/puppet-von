@@ -1,5 +1,4 @@
 no-resolv
-no-hosts
 cache-size=4096
 #log-queries
 # Forward DNS requests via wan-vpn
